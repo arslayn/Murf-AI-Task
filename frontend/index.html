@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 Days of Voice Agents</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1><i class="fas fa-microphone"></i> Voice Agents</h1>
+            <p>Complete Text-to-Speech, Speech-to-Text & Audio Recording Platform</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Text-to-Speech Section (Days 2-3) -->
+            <section class="feature-section" id="tts-section">
+                <h2><i class="fas fa-volume-up"></i> Text-to-Speech</h2>
+                <div class="input-group">
+                    <textarea 
+                        id="tts-text" 
+                        placeholder="Enter text to convert to speech..."
+                        rows="4"
+                        maxlength="1000"
+                    ></textarea>
+                    <div class="char-counter">
+                        <span id="char-count">0</span>/1000
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <select id="voice-select">
+                        <option value="en-US-davis">Davis (Male)</option>
+                        <option value="en-US-sarah">Sarah (Female)</option>
+                        <option value="en-US-john">John (Male)</option>
+                        <option value="en-US-emma">Emma (Female)</option>
+                    </select>
+                    <button id="generate-btn" class="btn btn-primary">
+                        <i class="fas fa-magic"></i> Generate Speech
+                    </button>
+                </div>
+
+                <div id="tts-result" class="result-container" style="display: none;">
+                    <div class="audio-player">
+                        <audio id="tts-audio" controls></audio>
+                        <div class="audio-info">
+                            <p><strong>Generated Audio URL:</strong></p>
+                            <a id="audio-url" href="#" target="_blank" class="url-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tts-loading" class="loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Generating audio...
+                </div>
+            </section>
+
+            <!-- Echo Bot Section (Day 4) -->
+            <section class="feature-section" id="echo-section">
+                <h2><i class="fas fa-echo"></i> Echo Bot</h2>
+                <p class="section-description">Record your voice and play it back instantly</p>
+                
+                <div class="recording-controls">
+                    <button id="start-record-btn" class="btn btn-record">
+                        <i class="fas fa-microphone"></i> Start Recording
+                    </button>
+                    <button id="stop-record-btn" class="btn btn-stop" disabled>
+                        <i class="fas fa-stop"></i> Stop Recording
+                    </button>
+                </div>
+
+                <div id="recording-status" class="status-indicator" style="display: none;">
+                    <div class="recording-animation">
+                        <i class="fas fa-circle recording-dot"></i>
+                        <span>Recording... <span id="recording-time">00:00</span></span>
+                    </div>
+                </div>
+
+                <div id="echo-result" class="result-container" style="display: none;">
+                    <h3>Your Recording:</h3>
+                    <audio id="echo-audio" controls></audio>
+                    <div class="recording-info">
+                        <p><strong>Duration:</strong> <span id="recording-duration"></span></p>
+                        <p><strong>Size:</strong> <span id="recording-size"></span></p>
+                    </div>
+                    
+                    <div class="upload-controls">
+                        <button id="upload-btn" class="btn btn-secondary">
+                            <i class="fas fa-cloud-upload-alt"></i> Upload to Server
+                        </button>
+                    </div>
+                </div>
+
+                <div id="upload-status" class="status-message" style="display: none;"></div>
+            </section>
+
+            <!-- File Upload & Transcription Section (Days 5-6) -->
+            <section class="feature-section" id="transcription-section">
+                <h2><i class="fas fa-file-audio"></i> Audio Transcription</h2>
+                <p class="section-description">Upload audio files and get text transcriptions</p>
+                
+                <div class="file-upload-area" id="file-upload-area">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p>Drag & drop audio files here or click to browse</p>
+                        <p class="file-info">Supported: MP3, WAV, MP4, WebM, OGG, FLAC, AAC (Max: 50MB)</p>
+                        <input type="file" id="file-input" accept="audio/*" multiple style="display: none;">
+                        <button class="btn btn-outline" onclick="document.getElementById('file-input').click()">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </button>
+                    </div>
+                </div>
+
+                <div id="file-list" class="file-list" style="display: none;"></div>
+
+                <div id="transcription-results" class="transcription-results" style="display: none;">
+                    <h3>Transcription Results:</h3>
+                    <div id="transcription-text" class="transcription-text"></div>
+                    <div class="transcription-actions">
+                        <button id="copy-transcription" class="btn btn-outline">
+                            <i class="fas fa-copy"></i> Copy Text
+                        </button>
+                        <button id="download-transcription" class="btn btn-outline">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <div id="transcription-loading" class="loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Transcribing audio...
+                </div>
+            </section>
+
+            <!-- API Status Section -->
+            <section class="feature-section" id="status-section">
+                <h2><i class="fas fa-heartbeat"></i> API Status</h2>
+                <div id="api-status" class="api-status">
+                    <div class="status-item">
+                        <span class="status-label">Backend:</span>
+                        <span id="backend-status" class="status-value">Checking...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Murf TTS:</span>
+                        <span id="murf-status" class="status-value">Checking...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">AssemblyAI:</span>
+                        <span id="assemblyai-status" class="status-value">Checking...</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Voice Agents Project | 30 Days Challenge</p>
+            <div class="footer-links">
+                <a href="/docs" target="_blank"><i class="fas fa-book"></i> API Docs</a>
+                <a href="#" onclick="checkApiStatus()"><i class="fas fa-sync"></i> Refresh Status</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+            <p id="error-message"></p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal" style="display: none;">
+        <div class="modal-content success">
+            <span class="close">&times;</span>
+            <h3><i class="fas fa-check-circle"></i> Success</h3>
+            <p id="success-message"></p>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
